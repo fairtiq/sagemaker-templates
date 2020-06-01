@@ -1,0 +1,58 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@1.0.0
+  aws-ecr: circleci/aws-ecr@6.8.2
+
+jobs:
+
+  sagemaker_build:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - add_ssh_keys # SSH keys for git clone private repos
+      - checkout
+      - run:
+          name: Prepare setup
+          command: ./sagemaker/prepare.sh
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          dockerfile: ./sagemaker/Dockerfile
+          path: .
+          region: AWS_REGION
+          repo: REPO_NAME  # TODO: change me
+          tag: $CIRCLE_BRANCH
+  sagemaker_training:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - aws-cli/setup:
+          aws-region: AWS_REGION
+      - run: pip install sagemaker
+      - run:
+          name: Run training script
+          command: python ./sagemaker/run_sagemaker.py
+
+
+workflows:
+
+  test:
+    jobs:
+    - request_sagemaker_training:
+        type: approval
+    - sagemaker_build:
+        context: aws-ecr-push
+        requires:
+          - request_sagemaker_training
+    - sagemaker_training:
+        context: aws-ecr-push
+        requires:
+          - sagemaker_build
