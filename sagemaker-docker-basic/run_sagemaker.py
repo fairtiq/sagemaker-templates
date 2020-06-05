@@ -16,8 +16,9 @@ tf_estimator = Estimator(
     role=role,
     train_instance_count=1,
     train_instance_type="ml.m5.large",
+    base_job_name=tag,
     sagemaker_session=sess,
-    output_path=f"s3://{BUCKET_NAME}/sagemaker/model",
+    output_path=f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}",
     image_name=f"{account_url}/{REPO_NAME}:{tag}",
     hyperparameters={"epochs": 200, "batch_size": 25, "dropout_rate": 0.5}
 )
