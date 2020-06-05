@@ -22,7 +22,7 @@ s3_model_output_location = f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}"
 
 hook_config = DebuggerHookConfig(
     s3_output_path=s3_model_output_location,
-    collection_configs=[CollectionConfig("weights"), CollectionConfig("gradients")],
+    collection_configs=[CollectionConfig("weights"), CollectionConfig("gradients"), CollectionConfig("biases")],
 )
 
 sess = sagemaker.Session(default_bucket=BUCKET_NAME)
