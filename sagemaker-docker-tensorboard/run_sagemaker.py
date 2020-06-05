@@ -14,11 +14,11 @@ BUCKET_NAME = "MY_BUCKET"
 REPO_NAME = "REPO_NAME"
 
 tensorboard_output_config = TensorBoardOutputConfig(
-    s3_output_path=f"s3://{BUCKET_NAME}/sagemaker/tensorboard",
+    s3_output_path=f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}/tensorboard",
     container_local_output_path="/opt/ml/output/tensorboard",
 )
 
-s3_model_output_location = f"s3://{BUCKET_NAME}/sagemaker/model"
+s3_model_output_location = f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}"
 
 hook_config = DebuggerHookConfig(
     s3_output_path=s3_model_output_location,
@@ -34,6 +34,7 @@ tf_estimator = Estimator(
     role=role,
     train_instance_count=1,
     train_instance_type="ml.m5.large",
+    base_job_name=tag,
     sagemaker_session=sess,
     output_path=s3_model_output_location,
     image_name=f"{account_url}/{REPO_NAME}:{tag}",
