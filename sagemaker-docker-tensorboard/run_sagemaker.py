@@ -47,6 +47,9 @@ tf_estimator = Estimator(
     ],
     tensorboard_output_config=tensorboard_output_config,
     debugger_hook_config=hook_config,
+    train_use_spot_instances=True, # save $$ on AWS
+    train_max_wait=3600,  # 1 hour
+    train_max_run=3600,
 )
 
 # will create ENV variables based on keys -- SM_CHANNEL_XXX
