@@ -22,7 +22,9 @@ s3_model_output_location = f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}"
 
 hook_config = DebuggerHookConfig(
     s3_output_path=s3_model_output_location,
-    collection_configs=[CollectionConfig("weights"), CollectionConfig("gradients"), CollectionConfig("biases")],
+    collection_configs=[CollectionConfig("weights"),
+                        CollectionConfig("gradients"),
+                        CollectionConfig("biases")],
 )
 
 sess = sagemaker.Session(default_bucket=BUCKET_NAME)
@@ -41,9 +43,7 @@ tf_estimator = Estimator(
     hyperparameters={"epochs": 200, "batch_size": 25, "dropout_rate": 0.3},
     metric_definitions=[
         {"Name": "train:loss", "Regex": "loss: (.*?) "},
-        {"Name": "train:precision", "Regex": "precision: (.*?) "},
         {"Name": "val:loss", "Regex": "val_loss: (.*?) "},
-        {"Name": "val:precision", "Regex": "val_precision: (.*?) "},
     ],
     tensorboard_output_config=tensorboard_output_config,
     debugger_hook_config=hook_config,
