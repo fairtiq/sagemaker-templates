@@ -20,7 +20,10 @@ tf_estimator = Estimator(
     sagemaker_session=sess,
     output_path=f"s3://{BUCKET_NAME}/sagemaker/{REPO_NAME}",
     image_name=f"{account_url}/{REPO_NAME}:{tag}",
-    hyperparameters={"epochs": 200, "batch_size": 25, "dropout_rate": 0.5}
+    hyperparameters={"epochs": 200, "batch_size": 25, "dropout_rate": 0.5},
+    train_use_spot_instances=True, # save $$ on AWS
+    train_max_wait=3600,  # 1 hour
+    train_max_run=3600,
 )
 
 # creates ENV variables based on keys -- SM_CHANNEL_XXX
