@@ -50,7 +50,6 @@ def train_model(args):
         x=train,
         epochs=args.epochs,
         validation_data=val,
-        callbacks=model.callbacks,
         verbose=2,  # print one log line per epoch -- important for parsing by sagemaker
     )
 
