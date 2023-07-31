@@ -1,5 +1,9 @@
 # FAIRTIQ: Training ML models in the cloud with AWS Sagemaker
 
+📦 This Repository is Archived 📦 - This project is no longer actively maintained or developed.
+
+---
+
 Welcome to our code repository that accompanies our [blog post](https://fairtiq.com/en/tech/training-ml-models-in-the-cloud-with-aws-sagemaker) on scaling Machine Learning (ML) models for startups. As your startup grows and the ML datasets become larger, training models on your laptop becomes impractical. This repository provides a solution to this challenge by utilizing cloud-based platforms for ML training.
 
 __Challenges addressed:__
